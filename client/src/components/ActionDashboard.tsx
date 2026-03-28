@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { ActionCard } from './ActionCard';
 import { MapView } from './MapView';
+import { NearbyServices } from './NearbyServices';
 import type { GeminiResponse } from '../types';
 
 interface ActionDashboardProps {
@@ -48,6 +49,11 @@ export const ActionDashboard: React.FC<ActionDashboardProps> = ({ result }) => {
               <span aria-hidden="true">🟢</span> {infoCount} Informational
             </span>
           )}
+          {result.detectedLanguage && (
+            <span className="badge" style={{ background: 'rgba(139,92,246,0.15)', color: 'var(--color-accent-purple-light)' }}>
+              🌐 Translated from {result.detectedLanguage}
+            </span>
+          )}
         </div>
       </div>
 
@@ -86,6 +92,9 @@ export const ActionDashboard: React.FC<ActionDashboardProps> = ({ result }) => {
             <Suspense fallback={<div style={{ height: '300px', background: 'var(--color-bg-tertiary)', borderRadius: 'var(--radius-lg)' }} />}>  
               <MapView location={result.location} />
             </Suspense>
+            <div style={{ marginTop: '1rem' }}>
+              <NearbyServices lat={result.location.lat} lng={result.location.lng} />
+            </div>
           </div>
         )}
 

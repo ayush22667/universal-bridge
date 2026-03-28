@@ -4,6 +4,8 @@ import { initializeApp, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { log, requestLogger } from './lib/logger.js';
 import { processRouter } from './routes/process.js';
+import { placesRouter } from './routes/places.js';
+import { transcribeRouter } from './routes/transcribe.js';
 
 if (!process.env.GEMINI_API_KEY) {
   log('error', 'GEMINI_API_KEY environment variable is required');
@@ -29,13 +31,15 @@ const PORT = process.env.PORT;
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   methods: ['POST', 'GET', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(requestLogger);
 
-app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString(), services: ['gemini', 'firestore', 'translate', 'places', 'speech'] }));
 app.use('/api/process', processRouter(db));
+app.use('/api/nearby', placesRouter());
+app.use('/api/transcribe', transcribeRouter());
 
 log('info', 'Starting Universal Bridge API', { port: PORT });
 

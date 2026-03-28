@@ -28,6 +28,7 @@ export interface GeminiResponse {
   structured_data: Record<string, unknown>;
   location?: Location;
   verification: VerificationStatus;
+  detectedLanguage?: string | null;
 }
 
 export interface ProcessedInput {

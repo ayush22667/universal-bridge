@@ -8,7 +8,7 @@ interface Scenario {
 }
 
 interface ScenarioButtonsProps {
-  onSelectScenario: (prompt: string) => void;
+  onSelectScenario: (prompt: string, scenarioId: string) => void;
   disabled: boolean;
 }
 
@@ -59,7 +59,7 @@ export const ScenarioButtons: React.FC<ScenarioButtonsProps> = React.memo(({ onS
         {scenarios.map(scenario => (
           <button
             key={scenario.id}
-            onClick={() => onSelectScenario(scenario.prompt)}
+            onClick={() => onSelectScenario(scenario.prompt, scenario.id)}
             className="scenario-btn glass-card"
             disabled={disabled}
             aria-label={`Try scenario: ${scenario.label}`}
