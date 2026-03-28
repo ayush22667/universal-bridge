@@ -40,6 +40,8 @@ function App() {
     geminiService.cancelRequest();
   }, []);
 
+  const isProcessing = processingState === 'processing';
+
   return (
     <div className="app">
       <SkipLink />
@@ -61,11 +63,11 @@ function App() {
           )}
 
           {/* Input area */}
-          {processingState !== 'processing' && (
+          {!isProcessing && (
             <>
               <OmniInput
                 onSubmit={handleProcess}
-                isProcessing={processingState === 'processing'}
+                isProcessing={isProcessing}
               />
               {processingState === 'idle' && !result && (
                 <ScenarioButtons onSelectScenario={handleScenario} disabled={false} />
@@ -74,7 +76,7 @@ function App() {
           )}
 
           {/* Processing */}
-          <ProcessingView isProcessing={processingState === 'processing'} />
+          <ProcessingView isProcessing={isProcessing} />
 
           {/* Error */}
           {processingState === 'error' && error && (
